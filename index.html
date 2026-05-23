@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PureAir – Vayurakshak Air Purifier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #f8f7f4;
+    --off-white: #eeecea;
+    --mist: #dde8e4;
+    --sage: #7aaa92;
+    --sage-dark: #4e7d6a;
+    --slate: #2f3f4a;
+    --slate-light: #4a5f6e;
+    --ink: #1a2229;
+    --gold: #c8a96e;
+    --gold-light: #e8cfa0;
+    --glass: rgba(255,255,255,0.55);
+    --radius: 20px;
+    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 60px;
+    background: rgba(248,247,244,0.85);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(122,170,146,0.15);
+    transition: var(--transition);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--slate);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--sage-dark); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 13.5px; font-weight: 400; letter-spacing: 0.06em;
+    color: var(--slate-light); text-decoration: none; text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  .nav-links a:hover { color: var(--sage-dark); }
+  .nav-cta {
+    background: var(--sage-dark); color: #fff !important;
+    padding: 10px 24px; border-radius: 50px;
+    font-weight: 500 !important; letter-spacing: 0.04em !important;
+    transition: background 0.25s !important;
+  }
+  .nav-cta:hover { background: var(--slate) !important; }
+
+  /* ── HERO ────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 140px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 65% 50%, #dde8e4 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, #e8f4f0 0%, transparent 60%);
+    z-index: 0;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(122,170,146,0.18); border: 1px solid rgba(122,170,146,0.4);
+    color: var(--sage-dark); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 7px 18px; border-radius: 50px; margin-bottom: 28px;
+  }
+  .hero-badge::before { content: '◉'; font-size: 9px; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 86px);
+    font-weight: 300; line-height: 1.07;
+    color: var(--slate); letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  h1 em { font-style: italic; color: var(--sage-dark); }
+  .hero-product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 42px); font-weight: 600;
+    color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-desc {
+    font-size: 16px; font-weight: 300; line-height: 1.75;
+    color: var(--slate-light); max-width: 440px; margin-bottom: 44px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--slate); color: #fff;
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--sage-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--slate);
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; border: 1.5px solid var(--slate);
+    cursor: pointer; transition: all var(--transition);
+    display: inline-block;
+  }
+  .btn-outline:hover { background: var(--slate); color: #fff; transform: translateY(-2px); }
+
+  /* hero image side */
+  .hero-visual { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; }
+  .product-ring {
+    position: relative; width: 480px; height: 480px;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .ring-outer {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(122,170,146,0.25);
+    animation: spin 30s linear infinite;
+  }
+  .ring-inner {
+    position: absolute; inset: 40px;
+    border-radius: 50%;
+    border: 1px dashed rgba(200,169,110,0.2);
+    animation: spin 20s linear infinite reverse;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .product-card-hero {
+    width: 320px; height: 420px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(221,232,228,0.6));
+    border-radius: 36px;
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 40px 80px rgba(47,63,74,0.12), 0 8px 24px rgba(47,63,74,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px; position: relative; overflow: hidden;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-16px); }
+  }
+  .product-card-hero::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(122,170,146,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .purifier-svg { width: 160px; height: 220px; position: relative; z-index: 1; }
+  .product-card-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--sage-dark);
+    position: relative; z-index: 1;
+  }
+  .aqi-badge {
+    position: absolute; bottom: 24px; right: -20px;
+    background: var(--slate); color: #fff;
+    padding: 12px 18px; border-radius: 16px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    animation: float 6s ease-in-out infinite 1s;
+  }
+  .aqi-badge strong { display: block; font-size: 22px; font-weight: 300; letter-spacing: 0; color: var(--sage); }
+
+  /* ── STATS STRIP ─────────────────────────────── */
+  .stats-strip {
+    background: var(--slate);
+    padding: 44px 60px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 0 20px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300;
+    color: var(--gold-light); line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5);
+  }
+
+  /* ── SECTION COMMON ──────────────────────────── */
+  section { padding: 100px 60px; }
+  .section-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--sage-dark);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 58px); font-weight: 300;
+    color: var(--slate); line-height: 1.1; margin-bottom: 20px;
+  }
+  .section-title em { font-style: italic; color: var(--sage-dark); }
+  .section-sub {
+    font-size: 15.5px; font-weight: 300; line-height: 1.8;
+    color: var(--slate-light); max-width: 520px;
+  }
+
+  /* ── TECHNOLOGY SECTION ──────────────────────── */
+  .tech-section { background: var(--off-white); }
+  .tech-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center; margin-top: 60px;
+  }
+  .tech-cards { display: flex; flex-direction: column; gap: 20px; }
+  .tech-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    border: 1px solid rgba(122,170,146,0.15);
+    display: flex; gap: 20px; align-items: flex-start;
+    transition: box-shadow var(--transition), transform var(--transition);
+    cursor: default;
+  }
+  .tech-card:hover {
+    box-shadow: 0 16px 48px rgba(47,63,74,0.1);
+    transform: translateX(6px);
+  }
+  .tech-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--mist), var(--sage));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .tech-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; color: var(--slate); margin-bottom: 6px;
+  }
+  .tech-card p { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--slate-light); }
+
+  .tech-visual {
+    position: relative; display: flex; justify-content: center; align-items: center;
+  }
+  .filtration-diagram {
+    width: 100%; max-width: 400px;
+    background: linear-gradient(160deg, #fff, var(--mist));
+    border-radius: 30px; padding: 40px;
+    border: 1px solid rgba(122,170,146,0.2);
+    box-shadow: 0 20px 60px rgba(47,63,74,0.08);
+  }
+  .filter-layer {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid rgba(122,170,146,0.15);
+  }
+  .filter-layer:last-child { border-bottom: none; }
+  .filter-dot {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .filter-layer-text h4 { font-size: 14px; font-weight: 500; color: var(--slate); margin-bottom: 3px; }
+  .filter-layer-text p { font-size: 12px; color: var(--slate-light); font-weight: 300; }
+
+  /* ── SPECS ───────────────────────────────────── */
+  .specs-section {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start;
+  }
+  .specs-header { margin-bottom: 40px; }
+  .spec-table { width: 100%; }
+  .spec-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(122,170,146,0.2);
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-key { font-size: 13.5px; font-weight: 400; color: var(--slate-light); }
+  .spec-val { font-size: 14px; font-weight: 500; color: var(--slate); letter-spacing: 0.02em; }
+  .spec-highlight { color: var(--sage-dark); }
+
+  .buy-card {
+    background: var(--slate);
+    border-radius: 30px; padding: 44px;
+    position: sticky; top: 100px;
+  }
+  .buy-card .product-name-sm {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px; font-weight: 300; color: #fff;
+    margin-bottom: 6px;
+  }
+  .buy-card .tagline-sm {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.1em;
+    color: var(--sage); text-transform: uppercase; margin-bottom: 30px;
+  }
+  .price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px; }
+  .price-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: var(--gold-light);
+  }
+  .price-sub { font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 300; }
+  .color-pickers { display: flex; gap: 10px; margin-bottom: 30px; }
+  .color-pick {
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: border-color 0.2s;
+  }
+  .color-pick.active { border-color: #fff; }
+  .buy-btn {
+    width: 100%; background: var(--sage-dark); color: #fff;
+    padding: 18px; border-radius: 50px; border: none;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background var(--transition);
+    margin-bottom: 14px;
+  }
+  .buy-btn:hover { background: var(--sage); }
+  .wishlist-btn {
+    width: 100%; background: transparent; color: rgba(255,255,255,0.6);
+    padding: 16px; border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px; font-weight: 400; cursor: pointer;
+    transition: all 0.25s;
+  }
+  .wishlist-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+  .buy-features { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .buy-feature { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; }
+  .buy-feature::before { content: '✓'; color: var(--sage); font-weight: 600; }
+
+  /* ── AQI MONITOR SECTION ─────────────────────── */
+  .monitor-section { background: var(--mist); }
+  .monitor-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center; margin-top: 60px;
+  }
+  .aqi-widget {
+    background: #fff; border-radius: 28px; padding: 40px;
+    box-shadow: 0 20px 60px rgba(47,63,74,0.08);
+  }
+  .aqi-widget h4 {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--slate-light); margin-bottom: 24px;
+  }
+  .aqi-dial {
+    display: flex; flex-direction: column; align-items: center;
+    margin-bottom: 30px;
+  }
+  .aqi-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; font-weight: 300; color: var(--sage-dark); line-height: 1;
+  }
+  .aqi-label { font-size: 13px; color: var(--slate-light); font-weight: 300; margin-top: 6px; }
+  .aqi-bar {
+    width: 100%; height: 8px; border-radius: 4px;
+    background: linear-gradient(90deg, #4caf7d 0%, #f9cb45 50%, #f44336 100%);
+    position: relative; margin-bottom: 8px;
+  }
+  .aqi-pointer {
+    position: absolute; left: 22%; top: -4px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--sage-dark);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .aqi-range { display: flex; justify-content: space-between; font-size: 11px; color: var(--slate-light); }
+  .pollutant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .pollutant-chip {
+    background: var(--off-white); border-radius: 12px; padding: 14px;
+    border: 1px solid rgba(122,170,146,0.2);
+  }
+  .pollutant-chip .p-name { font-size: 11px; color: var(--slate-light); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .pollutant-chip .p-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--slate); }
+  .pollutant-chip .p-unit { font-size: 10px; color: var(--slate-light); }
+
+  .monitor-features { display: flex; flex-direction: column; gap: 30px; }
+  .monitor-feature h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; color: var(--slate); margin-bottom: 8px;
+  }
+  .monitor-feature p { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--slate-light); }
+  .monitor-feature-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: rgba(122,170,146,0.35);
+    line-height: 1; margin-bottom: 4px;
+  }
+
+  /* ── TESTIMONIALS ────────────────────────────── */
+  .testimonials-section { background: var(--off-white); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; margin-top: 60px;
+  }
+  .testimonial-card {
+    background: #fff; border-radius: 24px; padding: 36px;
+    border: 1px solid rgba(122,170,146,0.1);
+    transition: box-shadow var(--transition), transform var(--transition);
+  }
+  .testimonial-card:hover {
+    box-shadow: 0 20px 50px rgba(47,63,74,0.09);
+    transform: translateY(-6px);
+  }
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 300; font-style: italic;
+    line-height: 1.6; color: var(--slate); margin-bottom: 24px;
+  }
+  .reviewer { display: flex; align-items: center; gap: 14px; }
+  .reviewer-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--mist), var(--sage));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 600; color: var(--sage-dark);
+  }
+  .reviewer-name { font-size: 14px; font-weight: 500; color: var(--slate); }
+  .reviewer-loc { font-size: 12px; color: var(--slate-light); }
+
+  /* ── CTA SECTION ─────────────────────────────── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--slate) 0%, #1a3040 100%);
+    text-align: center; padding: 100px 60px;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(122,170,146,0.15) 0%, transparent 70%);
+  }
+  .cta-section .section-tag { color: var(--sage); }
+  .cta-section .section-title { color: #fff; margin: 0 auto 20px; max-width: 600px; }
+  .cta-section .section-sub { color: rgba(255,255,255,0.55); margin: 0 auto 44px; text-align: center; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; }
+  .btn-light {
+    background: #fff; color: var(--slate);
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; transition: all var(--transition); display: inline-block;
+  }
+  .btn-light:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  /* ── FOOTER ──────────────────────────────────── */
+  footer {
+    background: var(--ink); padding: 60px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: 16px; color: #fff; }
+  .footer-brand .nav-logo span { color: var(--sage); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; line-height: 1.7; }
+  .footer-col h4 { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { font-size: 13.5px; color: rgba(255,255,255,0.5); text-decoration: none; font-weight: 300; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--sage); }
+  .footer-bottom {
+    background: var(--ink); padding: 20px 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 300; }
+
+  /* ── SCROLL ANIMATIONS ───────────────────────── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; }
+    .hero-visual { display: none; }
+    .stats-strip { grid-template-columns: repeat(2,1fr); }
+    .tech-grid, .monitor-grid, .specs-section { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; }
+    section { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">Pure<span>Air</span></a>
+  <ul class="nav-links">
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#monitor">Air Monitor</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#buy" class="nav-cta">Know Now</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-content fade-up">
+    <div class="hero-badge">Project VayuRaksha 2026</div>
+    <h1>Breathe <em>Pure,</em><br>Live Better</h1>
+    <div class="hero-product-name">Vayurakshak</div>
+    <p class="hero-desc">
+      A low-cost, high-performance air purifier designed by Team VayuRaskha at Silicon University. Built specially for hostels, PGs, and middle-class homes using locally sourced components and modular repairable design.
+    </p>
+    <div class="hero-actions">
+      <a href="#buy" class="btn-primary">Explore Vayurakshak</a>
+      <a href="#technology" class="btn-outline">Learn How It Works</a>
+    </div>
+  </div>
+  <div class="hero-visual fade-up">
+    <div class="product-ring">
+      <div class="ring-outer"></div>
+      <div class="ring-inner"></div>
+      <div class="product-card-hero">
+        <!-- Purifier Illustration (SVG) -->
+        <svg class="purifier-svg" viewBox="0 0 160 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Base -->
+          <ellipse cx="80" cy="200" rx="50" ry="10" fill="rgba(47,63,74,0.12)"/>
+          <!-- Body -->
+          <rect x="32" y="60" width="96" height="148" rx="28" fill="url(#bodyGrad)"/>
+          <!-- Mesh grille -->
+          <rect x="44" y="80" width="72" height="100" rx="18" fill="rgba(255,255,255,0.08)"/>
+          <!-- Grill lines -->
+          <line x1="52" y1="90" x2="52" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <line x1="62" y1="90" x2="62" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <line x1="72" y1="90" x2="72" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <line x1="82" y1="90" x2="82" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <line x1="92" y1="90" x2="92" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <line x1="102" y1="90" x2="102" y2="170" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <!-- Top cap -->
+          <rect x="36" y="50" width="88" height="22" rx="14" fill="url(#capGrad)"/>
+          <!-- LED ring top -->
+          <ellipse cx="80" cy="50" rx="30" ry="6" fill="none" stroke="#7aaa92" stroke-width="1.5" opacity="0.7"/>
+          <!-- Control button -->
+          <circle cx="80" cy="50" r="8" fill="#4e7d6a"/>
+          <circle cx="80" cy="50" r="5" fill="rgba(255,255,255,0.3)"/>
+          <!-- Air flow indicators -->
+          <path d="M 24 100 Q 14 110 24 120" stroke="#7aaa92" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+          <path d="M 136 100 Q 146 110 136 120" stroke="#7aaa92" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+          <!-- Brand mark -->
+          <text x="80" y="195" text-anchor="middle" font-family="serif" font-size="8" fill="rgba(255,255,255,0.4)" letter-spacing="2">PUREAIR</text>
+          <defs>
+            <linearGradient id="bodyGrad" x1="32" y1="60" x2="128" y2="208" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#3d5560"/>
+              <stop offset="100%" stop-color="#1a2229"/>
+            </linearGradient>
+            <linearGradient id="capGrad" x1="36" y1="50" x2="124" y2="72" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#4a6272"/>
+              <stop offset="100%" stop-color="#2f3f4a"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="product-card-label">Vayurakshak Pro</div>
+        <div class="aqi-badge">AQI <strong>12</strong> Excellent</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS STRIP ───────────────────────────────── -->
+<div class="stat-item fade-up">
+  <div class="stat-num">Low</div>
+  <div class="stat-label">Maintenance Cost</div>
+</div>
+
+<div class="stat-item fade-up">
+  <div class="stat-num">DIY</div>
+  <div class="stat-label">Repairable Design</div>
+</div>
+
+<div class="stat-item fade-up">
+  <div class="stat-num">Local</div>
+  <div class="stat-label">Component Sourcing</div>
+</div>
+
+<div class="stat-item fade-up">
+  <div class="stat-num">High</div>
+  <div class="stat-label">CADR per Rupee</div>
+</div>
+
+<!-- ── TECHNOLOGY ────────────────────────────────── -->
+<section class="tech-section" id="technology">
+  <div class="section-tag">Core Technology</div>
+  <div class="section-title">Engineered for Practical<em>Air Cleaning</em></div>
+  <div class="section-sub">Project VayuRaksha focuses on affordable and efficient air purification using standardized filters, modular components, and high airflow design optimized for student rooms and compact living spaces.</div>
+
+  <div class="tech-grid">
+    <div class="tech-cards fade-up">
+      <div class="tech-card">
+        <div class="tech-icon">🌿</div>
+        <div>
+          <h3>Pre-Filter</h3>
+          <p>Captures large dust particles before they can clog deeper filter layers extending the overall filter life significantly.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">⚡</div>
+        <div>
+          <h3>Locally Manufactured</h3>
+          <p>Built using locally sourced components to reduce cost and improve accessibility for Indian households and students.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🔬</div>
+        <div>
+          <h3>Modular CR-Box Design</h3>
+          <p>Inspired by CR-box air purifier architecture for maximum airflow efficiency with simple construction and easy maintenance.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">💡</div>
+        <div>
+          <h3>Class-F Filtration</h3>
+          <p>Uses standardized Class-F filters that are easily available locally and do not require proprietary replacements.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🌀</div>
+        <div>
+          <h3>High Static Exhaust Fan</h3>
+          <p>Designed for rapid air circulation and faster room purification with optimized airflow performance.</p>
+        </div>
+      </div>
+    </div>
+
+    <!--
+    <div class="tech-visual fade-up">
+      <div class="filtration-diagram">
+        <h4 style="font-size:12px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--slate-light); margin-bottom:24px;">Filtration Layers</h4>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.2);">🌿</div>
+          <div class="filter-layer-text">
+            <h4>Stage 1 — Pre-Filter</h4>
+            <p>Large particles, hair, fibre — washable</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(47,63,74,0.1);">⚡</div>
+          <div class="filter-layer-text">
+            <h4>Stage 2 — Activated Carbon</h4>
+            <p>VOCs, odours, formaldehyde, gases</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.3);">🔬</div>
+          <div class="filter-layer-text">
+            <h4>Stage 3 — HEPA H13</h4>
+            <p>PM2.5, PM10, pollen, bacteria — 99.97%</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(200,169,110,0.2);">💡</div>
+          <div class="filter-layer-text">
+            <h4>Stage 4 — UV-C Light</h4>
+            <p>Virus & bacteria neutralisation</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.15);">🌀</div>
+          <div class="filter-layer-text">
+            <h4>Stage 5 — Ion Generator</h4>
+            <p>Fresh, naturally ionised clean air output</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+</section>
+
+<!-- ── SPECS + BUY ────────────────────────────────── -->
+<section id="specs" style="padding: 100px 60px;">
+  <div class="specs-section">
+    <div>
+      <div class="specs-header">
+        <div class="section-tag">Technical Specifications</div>
+        <div class="section-title">Built to <em>Perform</em></div>
+        <div class="section-sub">Every specification is engineered with Indian living conditions in mind from monsoon humidity to peak winter pollution.</div>
+      </div>
+      <div class="spec-table fade-up">
+        <div class="spec-row"><span class="spec-key">Model</span><span class="spec-val spec-highlight">Vayurakshak</span></div>
+        <div class="spec-row"><span class="spec-key">CADR (Clean Air Delivery Rate)</span><span class="spec-val">per minute</span></div>
+        <div class="spec-row"><span class="spec-key">Room Coverage</span><span class="spec-val">Up to 75 m²</span></div>
+        <div class="spec-row"><span class="spec-key">Filter Type</span><span class="spec-val spec-highlight">Standardized Class-F Filters</span></div>
+        <div class="spec-row"><span class="spec-key">Repairability</span><span class="spec-val">DIY Friendly</span></div>
+        <div class="spec-row"><span class="spec-key">Fan Speeds</span><span class="spec-val">5 + Auto + Sleep</span></div>
+        <div class="spec-row"><span class="spec-key">Noise Level (Sleep Mode)</span><span class="spec-val spec-highlight">22 dB</span></div>
+        <div class="spec-row"><span class="spec-key">Power Consumption</span><span class="spec-val">45W (Max)</span></div>
+        <div class="spec-row"><span class="spec-key">Filter Life</span><span class="spec-val">~6,000 hours</span></div>
+        <div class="spec-row"><span class="spec-key">Design Philosophy</span><span class="spec-val">Affordable High CADR</span></div>
+        <div class="spec-row"><span class="spec-key">Maintenance</span><span class="spec-val">Low Cost & Modular</span></div>
+        <div class="spec-row"><span class="spec-key">Dimensions (H×W×D)</span><span class="spec-val">640 × 250 × 250 mm</span></div>
+        <div class="spec-row"><span class="spec-key">Weight</span><span class="spec-val">6.8 kg</span></div>
+        <div class="spec-row"><span class="spec-key">Manufacturing Approach</span><span class="spec-val">Make-in-India</span></div>
+        <div class="spec-row"><span class="spec-key">Warranty</span><span class="spec-val spec-highlight">2 Years + 1 Year Extended</span></div>
+      </div>
+    </div>
+
+    <div id="buy">
+      <div class="buy-card fade-up">
+        <div class="product-name-sm">Vayurakshak</div>
+        <div class="tagline-sm">Know about PureAir</div>
+        <!---
+        <div class="price-row">
+          <div class="price-main">₹ 24,999</div>
+          <div class="price-sub">incl. GST + free delivery</div>
+        </div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:14px; font-weight:300;">Choose Colour</div>
+        <div class="color-pickers">
+          <div class="color-pick active" style="background:#2f3f4a;" title="Slate Grey"></div>
+          <div class="color-pick" style="background:#f0ede8;" title="Ivory White"></div>
+          <div class="color-pick" style="background:#4e7d6a;" title="Forest Sage"></div>
+          <div class="color-pick" style="background:#8a7060;" title="Warm Taupe"></div>
+        </div>
+        -->
+        <button class="buy-btn">Request Demonstration</button>
+        <button class="wishlist-btn">View Project Details</button>
+        <!--
+        <div class="buy-features">
+          <div class="buy-feature">Live smoke-box demonstrations showing rapid air clearance.</div>
+          <div class="buy-feature">Designed specifically for small scaled environments.</div>
+          <div class="buy-feature">Uses non-proprietary filters available in local markets.</div>
+          <div class="buy-feature">2-year manufacturer warranty</div>
+          <div class="buy-feature">Smart app included</div>
+        </div>
+      -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AQI MONITOR ───────────────────────────────── -->
+<section class="monitor-section" id="monitor">
+  <div class="section-tag">Real-Time Intelligence</div>
+  <div class="section-title">Know Your Air,<br><em>Always</em></div>
+  <div class="section-sub">The built-in precision sensor suite monitors your room air quality in real time displayed on the device and synced to the PureAir app on your phone.</div>
+
+  <div class="monitor-grid">
+    <div class="aqi-widget fade-up">
+      <h4>Live Room Air Quality</h4>
+      <div class="aqi-dial">
+        <div class="aqi-num">12</div>
+        <div class="aqi-label">AQI - Excellent · Air is clean and safe</div>
+      </div>
+      <div class="aqi-bar"><div class="aqi-pointer"></div></div>
+      <div class="aqi-range"><span>0 - Good</span><span>150 - Unhealthy</span><span>300+ - Hazardous</span></div>
+      <div class="pollutant-grid" style="margin-top:24px;">
+        <div class="pollutant-chip">
+          <div class="p-name">PM 2.5</div>
+          <div class="p-val">5<span class="p-unit"> µg/m³</span></div>
+        </div>
+        <div class="pollutant-chip">
+          <div class="p-name">PM 10</div>
+          <div class="p-val">12<span class="p-unit"> µg/m³</span></div>
+        </div>
+        <div class="pollutant-chip">
+          <div class="p-name">VOC</div>
+          <div class="p-val">0.1<span class="p-unit"> ppm</span></div>
+        </div>
+        <div class="pollutant-chip">
+          <div class="p-name">Humidity</div>
+          <div class="p-val">54<span class="p-unit">%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="monitor-features fade-up">
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">01</div>
+        <h3>Laser Particle Sensor</h3>
+        <p>A precision laser scattering sensor detects PM1.0, PM2.5, and PM10 particles simultaneously. Updates every 2 seconds for truly real-time data.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">02</div>
+        <h3>CO₂ Detection</h3>
+        <p>Electrochemical sensors track total volatile organic compounds and CO₂ levels — alerting you before concentrations reach harmful thresholds.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">03</div>
+        <h3>Auto-Purify Mode</h3>
+        <p>When pollution spikes above your threshold, Vayurakshak automatically ramps up fan speed and notifies your phone, no manual intervention needed.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">04</div>
+        <h3>PureAir App (iOS &amp; Android)</h3>
+        <p>View historical AQI charts, schedule purification, control remotely, get filter replacement reminders, and compare outdoor vs indoor air quality.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ──────────────────────────────── -->
+<section class="testimonials-section" id="reviews">
+  <div class="section-tag">Project Highlights</div>
+  <div class="section-title">Built for<em>Thousands</em></div>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card fade-up">
+      <!-- <div class="stars">★★★★★</div> -->
+      <div class="testimonial-text">"Live smoke-box demonstrations showing rapid air clearance."</div>
+      <!-- <div class="reviewer">
+        <div class="reviewer-avatar">P</div>
+        <div>
+          <div class="reviewer-name">Priya Sharma</div>
+          <div class="reviewer-loc">Delhi, India</div>
+        </div>
+      </div>
+    -->
+    </div>
+     <div class="testimonial-card fade-up"> 
+      <!-- <div class="stars">★★★★★</div> -->
+      <div class="testimonial-text">"Designed specifically for hostel rooms and PG environments."</div>
+      <!--
+      <div class="reviewer">
+        <div class="reviewer-avatar">A</div>
+        <div>
+          <div class="reviewer-name">Arjun Mehta</div>
+          <div class="reviewer-loc">Mumbai, India</div>
+        </div>
+      </div>
+    -->
+    </div>
+    <div class="testimonial-card fade-up">
+      <!-- <div class="stars">★★★★☆</div> -->
+      <div class="testimonial-text">"Uses non-proprietary filters available in local markets."</div>
+      <!--
+      <div class="reviewer">
+        <div class="reviewer-avatar">S</div>
+        <div>
+          <div class="reviewer-name">Sunita Rao</div>
+          <div class="reviewer-loc">Bengaluru, India</div>
+        </div>
+      </div>
+    -->
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="section-tag">Start Your Journey</div>
+  <div class="section-title">Making Clean Air Affordable <em>for Everyone</em></div>
+  <div class="section-sub">Project VayuRaksha aims to provide practical and cost-effective air purification solutions for students, hostels, and middle-class households using locally engineered technology.</div>
+  <div class="cta-actions">
+    <a href="#buy" class="btn-light">Know Vayurakshak</a>
+    <a href="#technology" class="btn-outline" style="color:rgba(255,255,255,0.7); border-color:rgba(255,255,255,0.3);">Explore Technology</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="nav-logo">Pure<span>Air</span></a>
+    <p class="footer-tagline">Engineering clean air for Indian homes.<br>Breathe better, live longer.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Products</h4>
+    <ul>
+      <li><a href="#">Vayurakshak Air Purifier</a></li>
+      <li><a href="#">Replacement Filters</a></li>
+      <!--
+      <li><a href="#">Vayurakshak Slim</a></li>
+      <li><a href="#">Car Purifier</a></li>
+      -->
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About PureAir</a></li>
+      <li><a href="#">Our Technology</a></li>
+      <li><a href="#">Sustainability</a></li>
+      <li><a href="#">Press</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <ul>
+      <li><a href="#">Help Centre</a></li>
+      <li><a href="#">Filter Replacement</a></li>
+      <li><a href="#">Warranty Claims</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2025 PureAir Technologies Pvt. Ltd. All rights reserved.</p>
+  <p style="font-size:12px; color:rgba(255,255,255,0.2);">Privacy Policy · Terms of Use · Cookie Policy</p>
+</div>
+
+<!-- ── SCRIPTS ───────────────────────────────────── -->
+<script>
+  // Scroll animations
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  faders.forEach(el => observer.observe(el));
+
+  // Trigger hero elements immediately
+  document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
+
+  // Color picker interaction
+  document.querySelectorAll('.color-pick').forEach(pick => {
+    pick.addEventListener('click', () => {
+      document.querySelectorAll('.color-pick').forEach(p => p.classList.remove('active'));
+      pick.classList.add('active');
+    });
+  });
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(47,63,74,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
