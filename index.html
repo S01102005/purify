@@ -1051,7 +1051,7 @@
     document.getElementById('waitlist-error').style.display = 'none';
 
     try {
-      const res = await fetch(`${API_BASE}/waitlist`, {
+      const res = await fetch('https://vayuraksha-indol.vercel.app/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, phone, intendedUse }),
