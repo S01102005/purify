@@ -1,70 +1,72 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');
 
+// Import your routers
 const waitlistRouter = require('./routes/waitlist');
 const newsletterRouter = require('./routes/newsletter');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// ── Security headers ──────────────────────────────────────────────────────────
+// ── Middleware ───────────────────────────────────────────────────────────────
 app.use(helmet());
 
-// ── CORS ──────────────────────────────────────────────────────────────────────
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-  : ['http://localhost:3000', 'http://127.0.0.1:5500'];
+// Dynamic CORS configuration based on your environment variables
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim()) 
+  : ['http://127.0.0.1:5500'];
 
-  app.use(cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      // Instead of throwing a hard backend Error, fail gracefully via CORS standard:
-      return callback(null, false); 
-    },
-    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-Admin-Secret'],
-  }));
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-secret']
+}));
 
-// ── Body parsing ──────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ── Logging ───────────────────────────────────────────────────────────────────
-if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
-}
+// ── Serverless MongoDB Connection Logic ──────────────────────────────────────
+let isConnected = false;
 
-// ── Rate limiting ─────────────────────────────────────────────────────────────
-// Global: 100 requests per IP per 15 minutes
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, message: 'Too many requests. Please try again later.' },
+const connectDB = async () => {
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    const db = await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
+    isConnected = db.connections.readyState === 1;
+    console.log('✅ MongoDB connected successfully');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    throw error;
+  }
+};
+
+// Middleware to ensure DB is connected before processing any request on Vercel
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Database connection failed.' });
+  }
 });
 
-// Strict: 5 submissions per IP per hour for form endpoints
-const formLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, message: 'Too many submissions. Please try again in an hour.' },
-});
-
-app.use(globalLimiter);
-
-// ── Health check ──────────────────────────────────────────────────────────────
-app.get('/api/health', (_req, res) => {
+// ── Health Check Route ────────────────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     status: 'ok',
@@ -73,47 +75,27 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-// ── Routes ────────────────────────────────────────────────────────────────────
-app.use('/api/waitlist', formLimiter, waitlistRouter);
-app.use('/api/newsletter', formLimiter, newsletterRouter);
+// ── Route Mounts ──────────────────────────────────────────────────────────────
+app.use('/api/waitlist', waitlistRouter);
+app.use('/api/newsletter', newsletterRouter);
 
-// ── 404 handler ───────────────────────────────────────────────────────────────
-app.use((_req, res) => {
+// ── 404 Handler ───────────────────────────────────────────────────────────────
+app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found.' });
 });
 
-// ── Global error handler ──────────────────────────────────────────────────────
-app.use((err, _req, res, _next) => {
-  console.error(err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal server error.',
-  });
+// ── Global Error Handler ──────────────────────────────────────────────────────
+app.use((err, req, res, next) => {
+  console.error('[Global Error]:', err.stack);
+  res.status(500).json({ success: false, message: 'Something went wrong on the server.' });
 });
 
-// ── Connect to MongoDB then start server ──────────────────────────────────────
-mongoose
-  .connect(process.env.MONGO_URI, {
-    // These options are defaults in Mongoose 8, listed for clarity
-    serverSelectionTimeoutMS: 5000,
-  })
-  .then(() => {
-    console.log('✅  MongoDB connected');
-    app.listen(PORT, () => {
-      console.log(`🚀  Server running on http://localhost:${PORT}`);
-      console.log(`📋  Endpoints:`);
-      console.log(`    POST   /api/waitlist`);
-      console.log(`    GET    /api/waitlist/count`);
-      console.log(`    GET    /api/waitlist         (admin)`);
-      console.log(`    POST   /api/newsletter`);
-      console.log(`    DELETE /api/newsletter/unsubscribe`);
-      console.log(`    GET    /api/newsletter        (admin)`);
-      console.log(`    GET    /api/health`);
-    });
-  })
-  .catch(err => {
-    console.error('❌  MongoDB connection failed:', err.message);
-    process.exit(1);
+// Local Development Server (Vercel skips this and uses its own handler)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running locally on port ${PORT}`);
   });
+}
 
-module.exports = app; // for testing
+module.exports = app;
