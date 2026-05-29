@@ -76,15 +76,15 @@ app.get('/api/health', (req, res) => {
 });
 
 // ── Route Mounts ──────────────────────────────────────────────────────────────
-const path = require('path');
+/*const path = require('path');
 
 // Serve static frontend files from your "website" folder
-app.use(express.static(path.join(__dirname, 'website')));
+app.use(express.static(path.resolve(__dirname, 'website')));
 
 // Route to serve your main index.html for the landing page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'website', 'index.html'));
-});
+  res.sendFile(path.resolve(__dirname, 'website', 'index.html'));
+});*/
 app.use('/api/waitlist', waitlistRouter);
 app.use('/api/newsletter', newsletterRouter);
 
