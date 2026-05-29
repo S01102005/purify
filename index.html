@@ -977,10 +977,9 @@
 
 <script>
   // ─────────────────────────────────────────────────────────────────
-  // CONFIG — change this to your backend URL when deployed
+  // CONFIG — production backend URL for serverless deployment
   // ─────────────────────────────────────────────────────────────────
-  const API_BASE = 'http://localhost:5000/api';
-  // For production, change to e.g.: const API_BASE = 'https://your-server.com/api';
+  const API_BASE = 'https://vayuraksha-indol.vercel.app/api';
 
   // ─────────────────────────────────────────────────────────────────
   // SCROLL ANIMATIONS
@@ -1051,7 +1050,7 @@
     document.getElementById('waitlist-error').style.display = 'none';
 
     try {
-      const res = await fetch('https://vayuraksha-indol.vercel.app/api/waitlist', {
+      const res = await fetch(`${API_BASE}/waitlist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, phone, intendedUse }),
@@ -1156,7 +1155,7 @@
   // IMAGE PREVIEW
   // ─────────────────────────────────────────────────────────────────
   function previewImage(input, imgId) {
-    if (input.files && input.files[0]) {
+    if (input.files && input.files) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = document.getElementById(imgId);
@@ -1164,12 +1163,12 @@
         img.style.display = 'block';
         input.closest('.filter-placeholder').style.display = 'none';
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(input.files);
     }
   }
 
   function previewWhatImage(input) {
-    if (input.files && input.files[0]) {
+    if (input.files && input.files) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = document.getElementById('what-img');
@@ -1177,7 +1176,7 @@
         img.style.display = 'block';
         input.closest('.what-image-placeholder').style.display = 'none';
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(input.files);
     }
   }
 
