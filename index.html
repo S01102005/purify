@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PureAir – Vayurakshak Air Purifier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #f8f7f4;
+    --off-white: #eeecea;
+    --mist: #dde8e4;
+    --sage: #7aaa92;
+    --sage-dark: #4e7d6a;
+    --slate: #2f3f4a;
+    --slate-light: #4a5f6e;
+    --ink: #1a2229;
+    --gold: #c8a96e;
+    --gold-light: #e8cfa0;
+    --glass: rgba(255,255,255,0.55);
+    --radius: 20px;
+    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 60px;
+    background: rgba(248,247,244,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(122,170,146,0.15);
+    transition: var(--transition);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--slate); text-decoration: none;
+  }
+  .nav-logo span { color: var(--sage-dark); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 13.5px; font-weight: 400; letter-spacing: 0.06em;
+    color: var(--slate-light); text-decoration: none; text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  .nav-links a:hover { color: var(--sage-dark); }
+  .nav-cta {
+    background: var(--sage-dark); color: #fff !important;
+    padding: 10px 24px; border-radius: 50px;
+    font-weight: 500 !important; letter-spacing: 0.04em !important;
+    transition: background 0.25s !important;
+  }
+  .nav-cta:hover { background: var(--slate) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--slate); border-radius: 2px; transition: 0.3s; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 140px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 65% 50%, #dde8e4 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, #e8f4f0 0%, transparent 60%);
+    z-index: 0;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(122,170,146,0.18); border: 1px solid rgba(122,170,146,0.4);
+    color: var(--sage-dark); font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 7px 18px; border-radius: 50px; margin-bottom: 28px;
+  }
+  .hero-badge::before { content: '◉'; font-size: 9px; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 86px);
+    font-weight: 300; line-height: 1.07;
+    color: var(--slate); letter-spacing: -0.01em; margin-bottom: 10px;
+  }
+  h1 em { font-style: italic; color: var(--sage-dark); }
+  .hero-product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 42px); font-weight: 600;
+    color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero-desc {
+    font-size: 16px; font-weight: 300; line-height: 1.75;
+    color: var(--slate-light); max-width: 440px; margin-bottom: 44px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--slate); color: #fff;
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--sage-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--slate);
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; border: 1.5px solid var(--slate);
+    cursor: pointer; transition: all var(--transition); display: inline-block;
+  }
+  .btn-outline:hover { background: var(--slate); color: #fff; transform: translateY(-2px); }
+  .hero-visual { position: relative; z-index: 2; display: flex; justify-content: center; align-items: center; }
+  .product-ring {
+    position: relative; width: 480px; height: 480px;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .ring-outer {
+    position: absolute; inset: 0; border-radius: 50%;
+    border: 1px solid rgba(122,170,146,0.25);
+    animation: spin 30s linear infinite;
+  }
+  .ring-inner {
+    position: absolute; inset: 40px; border-radius: 50%;
+    border: 1px dashed rgba(200,169,110,0.2);
+    animation: spin 20s linear infinite reverse;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .product-card-hero {
+    width: 320px; height: 420px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(221,232,228,0.6));
+    border-radius: 36px; border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: 0 40px 80px rgba(47,63,74,0.12), 0 8px 24px rgba(47,63,74,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px; position: relative; overflow: hidden;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  .product-card-hero::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(122,170,146,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .filter-placeholder {
+    width: 200px; height: 200px;
+    border: 2px dashed rgba(122,170,146,0.5);
+    border-radius: 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px;
+    background: rgba(122,170,146,0.06);
+    position: relative; z-index: 1;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .filter-placeholder:hover { border-color: var(--sage); background: rgba(122,170,146,0.1); }
+  .filter-placeholder svg { opacity: 0.5; }
+  .filter-placeholder span {
+    font-size: 11px; color: var(--sage-dark); font-weight: 400;
+    letter-spacing: 0.06em; text-align: center; opacity: 0.7;
+  }
+  .filter-placeholder input { display: none; }
+
+  .product-card-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--sage-dark); position: relative; z-index: 1;
+  }
+  .aqi-badge {
+    position: absolute; bottom: 24px; right: -20px;
+    background: var(--slate); color: #fff;
+    padding: 12px 18px; border-radius: 16px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    animation: float 6s ease-in-out infinite 1s;
+  }
+  .aqi-badge strong { display: block; font-size: 22px; font-weight: 300; letter-spacing: 0; color: var(--sage); }
+
+  /* ── SOCIAL PROOF STRIP ── */
+  .social-proof-bar {
+    background: rgba(122,170,146,0.1); border-top: 1px solid rgba(122,170,146,0.2);
+    border-bottom: 1px solid rgba(122,170,146,0.2);
+    padding: 14px 60px; display: flex; align-items: center; justify-content: center;
+    gap: 8px; font-size: 13px; color: var(--sage-dark); font-weight: 400;
+  }
+  .social-proof-bar strong { font-weight: 600; font-size: 15px; }
+  #signup-count-display { display: none; }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--slate);
+    padding: 44px 60px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-item { text-align: center; padding: 0 20px; border-right: 1px solid rgba(255,255,255,0.1); }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300; color: var(--gold-light); line-height: 1; margin-bottom: 8px;
+  }
+  .stat-label { font-size: 12px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: 100px 60px; }
+  .section-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--sage-dark); margin-bottom: 16px; }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 58px); font-weight: 300;
+    color: var(--slate); line-height: 1.1; margin-bottom: 20px;
+  }
+  .section-title em { font-style: italic; color: var(--sage-dark); }
+  .section-sub { font-size: 15.5px; font-weight: 300; line-height: 1.8; color: var(--slate-light); max-width: 520px; }
+
+  /* ── WHAT DOES IT DO ── */
+  .what-section { background: #fff; }
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 60px; }
+  .what-image-block {
+    position: relative; border-radius: 30px; overflow: hidden;
+    background: linear-gradient(160deg, var(--mist), #e8f0ec);
+    min-height: 460px; display: flex; align-items: center; justify-content: center;
+  }
+  .what-quote-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(47,63,74,0.92) 0%, transparent 100%);
+    padding: 40px 32px 32px;
+  }
+  .what-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-style: italic; font-weight: 300;
+    color: rgba(255,255,255,0.95); line-height: 1.5; margin-bottom: 10px;
+  }
+  .what-quote-attr { font-size: 12px; color: var(--sage); letter-spacing: 0.08em; }
+  .what-image-placeholder {
+    width: 100%; height: 100%; min-height: 460px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; cursor: pointer;
+  }
+  .what-image-placeholder svg { opacity: 0.35; }
+  .what-image-placeholder span { font-size: 12px; color: var(--slate-light); opacity: 0.6; }
+  .what-image-placeholder input { display: none; }
+
+  .what-points { display: flex; flex-direction: column; gap: 28px; }
+  .what-point { display: flex; gap: 20px; }
+  .what-point-icon {
+    width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--mist), var(--sage));
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .what-point h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--slate); margin-bottom: 6px; }
+  .what-point p { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--slate-light); }
+
+  /* ── TECHNOLOGY ── */
+  .tech-section { background: var(--off-white); }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 60px; }
+  .tech-cards { display: flex; flex-direction: column; gap: 20px; }
+  .tech-card {
+    background: #fff; border-radius: var(--radius); padding: 28px 32px;
+    border: 1px solid rgba(122,170,146,0.15);
+    display: flex; gap: 20px; align-items: flex-start;
+    transition: box-shadow var(--transition), transform var(--transition); cursor: default;
+  }
+  .tech-card:hover { box-shadow: 0 16px 48px rgba(47,63,74,0.1); transform: translateX(6px); }
+  .tech-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--mist), var(--sage));
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .tech-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--slate); margin-bottom: 6px; }
+  .tech-card p { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--slate-light); }
+
+  .filtration-diagram {
+    width: 100%; max-width: 420px;
+    background: linear-gradient(160deg, #fff, var(--mist));
+    border-radius: 30px; padding: 40px;
+    border: 1px solid rgba(122,170,146,0.2);
+    box-shadow: 0 20px 60px rgba(47,63,74,0.08);
+  }
+  .filtration-diagram h4 { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate-light); margin-bottom: 24px; }
+  .filter-layer { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(122,170,146,0.15); }
+  .filter-layer:last-child { border-bottom: none; }
+  .filter-dot { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .filter-layer-text h4 { font-size: 14px; font-weight: 500; color: var(--slate); margin-bottom: 3px; letter-spacing: 0; }
+  .filter-layer-text p { font-size: 12px; color: var(--slate-light); font-weight: 300; }
+
+  /* ── SMART FEATURES ── */
+  .smart-section { background: var(--slate); overflow: hidden; position: relative; }
+  .smart-section::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(122,170,146,0.12) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .smart-section .section-tag { color: var(--sage); }
+  .smart-section .section-title { color: #fff; }
+  .smart-section .section-sub { color: rgba(255,255,255,0.55); }
+  .smart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+  .smart-card {
+    background: rgba(255,255,255,0.06); border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1); padding: 36px 28px;
+    transition: all var(--transition);
+  }
+  .smart-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+  .smart-card-icon { font-size: 36px; margin-bottom: 20px; }
+  .smart-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 10px; }
+  .smart-card p { font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(255,255,255,0.55); }
+  .smart-card .tag-future {
+    display: inline-block; margin-top: 14px;
+    background: rgba(200,169,110,0.2); border: 1px solid rgba(200,169,110,0.35);
+    color: var(--gold-light); font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 50px;
+  }
+  .smart-highlight-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;
+  }
+  .smart-highlight {
+    background: rgba(122,170,146,0.15); border: 1px solid rgba(122,170,146,0.25);
+    border-radius: 20px; padding: 28px;
+  }
+  .smart-highlight .num {
+    font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300;
+    color: var(--sage); line-height: 1; margin-bottom: 6px;
+  }
+  .smart-highlight p { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 300; }
+
+  /* ── WAITLIST CARD ── */
+  .specs-buy-section { padding: 100px 60px; }
+  .buy-card {
+    background: var(--slate); border-radius: 30px; padding: 44px;
+    position: sticky; top: 100px;
+  }
+  .buy-card .product-name-sm { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; color: #fff; margin-bottom: 6px; }
+  .buy-card .tagline-sm { font-size: 12px; font-weight: 400; letter-spacing: 0.1em; color: var(--sage); text-transform: uppercase; margin-bottom: 30px; }
+  .waitlist-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+  .waitlist-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .waitlist-form input, .waitlist-form select {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; padding: 14px 18px; border-radius: 14px;
+    font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color 0.25s;
+  }
+  .waitlist-form input::placeholder { color: rgba(255,255,255,0.35); }
+  .waitlist-form input:focus, .waitlist-form select:focus { border-color: var(--sage); }
+  .waitlist-form select option { background: var(--slate); }
+  .buy-btn {
+    width: 100%; background: var(--sage-dark); color: #fff;
+    padding: 18px; border-radius: 50px; border: none;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background var(--transition); margin-bottom: 14px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .buy-btn:hover:not(:disabled) { background: var(--sage); }
+  .buy-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+  .wishlist-btn {
+    width: 100%; background: transparent; color: rgba(255,255,255,0.6);
+    padding: 16px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.15);
+    font-size: 13px; font-weight: 400; cursor: pointer; transition: all 0.25s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .wishlist-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+  .buy-features { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .buy-feature { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 300; }
+  .buy-feature::before { content: '✓'; color: var(--sage); font-weight: 600; }
+  .success-msg {
+    display: none; background: rgba(122,170,146,0.2); border: 1px solid rgba(122,170,146,0.4);
+    border-radius: 14px; padding: 16px; text-align: center;
+    color: var(--sage); font-size: 14px; margin-bottom: 16px;
+  }
+  .error-msg {
+    display: none; background: rgba(220,80,80,0.15); border: 1px solid rgba(220,80,80,0.35);
+    border-radius: 14px; padding: 16px; text-align: center;
+    color: #ff8a80; font-size: 14px; margin-bottom: 16px;
+  }
+
+  /* ── AQI MONITOR ── */
+  .monitor-section { background: var(--mist); }
+  .monitor-features { display: flex; flex-direction: column; gap: 30px; }
+  .monitor-feature h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--slate); margin-bottom: 8px; }
+  .monitor-feature p { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--slate-light); }
+  .monitor-feature-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: rgba(122,170,146,0.35); line-height: 1; margin-bottom: 4px; }
+
+  /* ── HIGHLIGHTS ── */
+  .highlights-section { background: #fff; }
+  .highlights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 60px; }
+  .highlight-card {
+    border-radius: 24px; padding: 36px;
+    border: 1px solid rgba(122,170,146,0.12);
+    transition: box-shadow var(--transition), transform var(--transition);
+    background: var(--off-white);
+  }
+  .highlight-card:hover { box-shadow: 0 20px 50px rgba(47,63,74,0.09); transform: translateY(-6px); }
+  .highlight-card-icon { font-size: 32px; margin-bottom: 18px; }
+  .highlight-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--slate); margin-bottom: 10px; }
+  .highlight-card p { font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--slate-light); }
+
+  /* ── NEWSLETTER ── */
+  .newsletter-section {
+    background: linear-gradient(135deg, var(--sage-dark) 0%, #2f5e4e 100%);
+    padding: 80px 60px; text-align: center; position: relative; overflow: hidden;
+  }
+  .newsletter-section::before {
+    content: '';
+    position: absolute; top: -150px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+  }
+  .newsletter-section .section-tag { color: rgba(255,255,255,0.7); }
+  .newsletter-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px); font-weight: 300;
+    color: #fff; margin-bottom: 12px; line-height: 1.15;
+  }
+  .newsletter-section p { font-size: 15px; color: rgba(255,255,255,0.65); margin-bottom: 40px; font-weight: 300; }
+  .nl-form { display: flex; gap: 12px; max-width: 500px; margin: 0 auto; }
+  .nl-input {
+    flex: 1; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; padding: 16px 22px; border-radius: 50px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.25s;
+  }
+  .nl-input::placeholder { color: rgba(255,255,255,0.45); }
+  .nl-input:focus { border-color: rgba(255,255,255,0.6); }
+  .nl-btn {
+    background: #fff; color: var(--sage-dark);
+    padding: 16px 30px; border-radius: 50px; border: none;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; white-space: nowrap;
+    transition: all 0.25s;
+  }
+  .nl-btn:hover:not(:disabled) { background: var(--gold-light); }
+  .nl-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+  .nl-success { display: none; color: rgba(255,255,255,0.9); font-size: 14px; margin-top: 12px; }
+  .nl-error { display: none; color: #ffb3b3; font-size: 14px; margin-top: 12px; }
+  .nl-privacy { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 16px; }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: linear-gradient(135deg, var(--slate) 0%, #1a3040 100%);
+    text-align: center; padding: 100px 60px;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(122,170,146,0.15) 0%, transparent 70%);
+  }
+  .cta-section .section-tag { color: var(--sage); }
+  .cta-section .section-title { color: #fff; margin: 0 auto 20px; max-width: 600px; }
+  .cta-section .section-sub { color: rgba(255,255,255,0.55); margin: 0 auto 44px; text-align: center; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; }
+  .btn-light {
+    background: #fff; color: var(--slate);
+    padding: 16px 38px; border-radius: 50px;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; transition: all var(--transition); display: inline-block;
+  }
+  .btn-light:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--ink); padding: 60px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+  .footer-brand .nav-logo { display: block; margin-bottom: 16px; color: #fff; }
+  .footer-brand .nav-logo span { color: var(--sage); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 300; line-height: 1.7; }
+  .footer-col h4 { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { font-size: 13.5px; color: rgba(255,255,255,0.5); text-decoration: none; font-weight: 300; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--sage); }
+  .footer-bottom {
+    background: var(--ink); padding: 20px 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 300; }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+    background: var(--slate); color: #fff;
+    padding: 16px 24px; border-radius: 16px;
+    font-size: 14px; font-weight: 400;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .toast-check { color: var(--sage); margin-right: 8px; }
+  .toast.error .toast-check { color: #ff8a80; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .smart-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; }
+    .hero-visual { display: none; }
+    .stats-strip { grid-template-columns: repeat(2,1fr); gap: 2px; }
+    .tech-grid, .monitor-grid, .what-grid { grid-template-columns: 1fr; }
+    .specs-section { grid-template-columns: 1fr; }
+    .smart-grid { grid-template-columns: 1fr; }
+    .highlights-grid { grid-template-columns: 1fr; }
+    .smart-highlight-row { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; }
+    section { padding: 60px 24px; }
+    .specs-buy-section { padding: 60px 24px; }
+    .nl-form { flex-direction: column; }
+    .newsletter-section { padding: 60px 24px; }
+    .cta-section { padding: 60px 24px; }
+    footer { padding: 40px 24px; }
+    .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    .social-proof-bar { padding: 14px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-check" id="toast-icon">✓</span><span id="toast-msg"></span></div>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Pure<span>Air</span></a>
+  <ul class="nav-links">
+    <li><a href="#what">What It Does</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#smart">Smart Features</a></li>
+    <li><a href="#monitor">Air Monitor</a></li>
+    <li><a href="#buy" class="nav-cta">Join Waitlist</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-content fade-up">
+    <div class="hero-badge">Project VayuRaksha 2026 · Silicon University</div>
+    <h1>Breathe <em>Pure,</em><br>Live Better</h1>
+    <div class="hero-product-name">Vayurakshak</div>
+    <p class="hero-desc">
+      A high-performance air purifier designed for hostels, PGs, and middle-class Indian homes — built for real-world Indian conditions, affordable to run, and easy to maintain.
+    </p>
+    <div class="hero-actions">
+      <a href="#buy" class="btn-primary">Join the Waitlist</a>
+      <a href="#what" class="btn-outline">See How It Works</a>
+    </div>
+  </div>
+  <div class="hero-visual fade-up">
+    <div class="product-ring">
+      <div class="ring-outer"></div>
+      <div class="ring-inner"></div>
+      <div class="product-card-hero">
+        <label class="filter-placeholder" title="Click to upload product image">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="12" width="36" height="28" rx="4" stroke="#4e7d6a" stroke-width="2"/>
+            <circle cx="32" cy="22" r="4" stroke="#4e7d6a" stroke-width="2"/>
+            <path d="M6 32l10-8 8 6 6-5 12 9" stroke="#4e7d6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M24 6v6M21 9h6" stroke="#4e7d6a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>Product Image<br>Click to Upload</span>
+          <input type="file" accept="image/*" onchange="previewImage(this, 'hero-img')">
+        </label>
+        <img id="hero-img" style="display:none; width:160px; height:200px; object-fit:contain; border-radius:12px; position:relative; z-index:1;" alt="Vayurakshak"/>
+        <div class="product-card-label">Vayurakshak</div>
+        <div class="aqi-badge">AQI <strong>12</strong> Excellent</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF BAR (shows when count > 0) ── -->
+<div class="social-proof-bar" id="signup-count-display">
+  🌿 <strong id="signup-count">0</strong>&nbsp;people have already joined the waitlist. Don't miss out.
+</div>
+
+<!-- ── STATS STRIP ── -->
+<div class="stats-strip">
+  <div class="stat-item fade-up">
+    <div class="stat-num">75m²</div>
+    <div class="stat-label">Room Coverage Area</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">22dB</div>
+    <div class="stat-label">Silent Sleep Mode</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">45W</div>
+    <div class="stat-label">Max Power Draw</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">6000h</div>
+    <div class="stat-label">Filter Lifespan</div>
+  </div>
+</div>
+
+<!-- ── WHAT DOES IT DO ── -->
+<section class="what-section" id="what">
+  <div class="section-tag">The Essentials</div>
+  <div class="section-title">What Does Vayurakshak <em>Actually Do?</em></div>
+  <div class="section-sub">Beyond the specs — here's how the Vayurakshak changes the air in your room and the life inside it.</div>
+
+  <div class="what-grid">
+    <div class="what-image-block fade-up">
+      <label class="what-image-placeholder" title="Click to upload demo image">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <rect x="8" y="14" width="40" height="30" rx="6" stroke="#4e7d6a" stroke-width="2"/>
+          <circle cx="37" cy="25" r="5" stroke="#4e7d6a" stroke-width="2"/>
+          <path d="M8 36l12-9 8 7 8-6 12 10" stroke="#4e7d6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 6v8M25 9h6" stroke="#4e7d6a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Lifestyle / Demo Image<br>Click to Upload</span>
+        <input type="file" accept="image/*" onchange="previewWhatImage(this)">
+      </label>
+      <img id="what-img" style="display:none; width:100%; height:460px; object-fit:cover;" alt="Vayurakshak Demo"/>
+      <div class="what-quote-overlay">
+        <div class="what-quote">"From smoky haze to breathable clarity — in under 20 minutes."</div>
+        <div class="what-quote-attr">— Live Smoke-Box Demonstration, Silicon University</div>
+      </div>
+    </div>
+
+    <div class="what-points fade-up">
+      <div class="what-point">
+        <div class="what-point-icon">🫁</div>
+        <div>
+          <h3>Removes PM2.5 & PM10 Particles</h3>
+          <p>Class-F filters capture fine dust, smoke, pollen, and airborne particulates that cause respiratory issues — especially critical in Indian cities during peak pollution months.</p>
+        </div>
+      </div>
+      <div class="what-point">
+        <div class="what-point-icon">💨</div>
+        <div>
+          <h3>Rapid Air Turnover for Small Rooms</h3>
+          <p>Optimized for rooms up to 75 m², it cycles and cleans all the air in your room multiple times per hour so you're always breathing fresh air — not recycled stuffy air.</p>
+        </div>
+      </div>
+      <div class="what-point">
+        <div class="what-point-icon">🔧</div>
+        <div>
+          <h3>Hassle-Free Maintenance</h3>
+          <p>Designed for simple upkeep with no complicated servicing. Filter replacements are quick, affordable, and don't need a technician — keeping your running costs genuinely low.</p>
+        </div>
+      </div>
+      <div class="what-point">
+        <div class="what-point-icon">⚡</div>
+        <div>
+          <h3>Runs on Less Power Than a Light Bulb</h3>
+          <p>At just 45W max, Vayurakshak costs less than ₹50/month to run 24/7 — making clean air genuinely affordable for hostel students and budget-conscious households.</p>
+        </div>
+      </div>
+      <div class="what-point">
+        <div class="what-point-icon">📊</div>
+        <div>
+          <h3>Tells You Exactly How Clean Your Air Is</h3>
+          <p>Built-in sensors display live AQI, PM2.5, CO₂, and humidity readings — so you can see the air quality improve in real time after switching it on.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TECHNOLOGY ── -->
+<section class="tech-section" id="technology">
+  <div class="section-tag">Core Technology</div>
+  <div class="section-title">Engineered for <em>Practical Air Cleaning</em></div>
+  <div class="section-sub">Vayurakshak is built around a multi-stage filtration system optimized for Indian indoor environments — compact, efficient, and designed to deliver clean air where it's needed most.</div>
+
+  <div class="tech-grid">
+    <div class="tech-cards fade-up">
+      <div class="tech-card">
+        <div class="tech-icon">🌿</div>
+        <div>
+          <h3>Multi-Stage Filtration</h3>
+          <p>A layered filtration system captures everything from large dust particles down to microscopic pollutants — progressively cleaning the air at every stage.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🔬</div>
+        <div>
+          <h3>High-Grade Filter Media</h3>
+          <p>Standardized, widely available filter media ensures consistent performance and keeps long-term ownership costs low — no brand-locked or imported replacements needed.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">📦</div>
+        <div>
+          <h3>Optimized Airflow Design</h3>
+          <p>The internal layout is engineered for maximum air throughput with minimal resistance, so every watt of power translates directly into cleaner room air.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🌀</div>
+        <div>
+          <h3>Powerful, Efficient Fan</h3>
+          <p>A high-performance fan moves large volumes of air through the filter stack quietly and consistently — even at lower speed settings.</p>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🇮🇳</div>
+        <div>
+          <h3>Made in India</h3>
+          <p>Locally assembled using domestically sourced components — designed specifically for Indian power conditions, climate, and pollution patterns.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-visual fade-up">
+      <div class="filtration-diagram">
+        <h4>How it Works</h4>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.2);">💨</div>
+          <div class="filter-layer-text">
+            <h4>Polluted Air Drawn In</h4>
+            <p>Room air is pulled through the system continuously</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.25);">🌿</div>
+          <div class="filter-layer-text">
+            <h4>Stage 1 — Coarse Pre-Filter</h4>
+            <p>Traps large particles, dust, and fibres</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(47,63,74,0.1);">🔬</div>
+          <div class="filter-layer-text">
+            <h4>Stage 2 — Fine Filter Media</h4>
+            <p>Captures PM2.5, PM10, pollen, and fine particles</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.3);">📊</div>
+          <div class="filter-layer-text">
+            <h4>Sensor Array</h4>
+            <p>Monitors air quality in real time, every 2 seconds</p>
+          </div>
+        </div>
+        <div class="filter-layer">
+          <div class="filter-dot" style="background:rgba(122,170,146,0.15);">✨</div>
+          <div class="filter-layer-text">
+            <h4>Clean Air Output</h4>
+            <p>Fresh, filtered air returned to your room</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SMART FEATURES ── -->
+<section class="smart-section" id="smart">
+  <div class="section-tag">Intelligence Built In</div>
+  <div class="section-title">Smart Features, <em>Simple Life</em></div>
+  <div class="section-sub">Vayurakshak isn't just a fan with a filter. It monitors, adapts, and communicates — so you never have to think about air quality again.</div>
+
+  <div class="smart-grid">
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">📱</div>
+      <h3>PureAir App (iOS & Android)</h3>
+      <p>Control fan speed, view live AQI charts, set schedules, get filter-change reminders, and compare indoor vs outdoor air quality — all from your phone.</p>
+    </div>
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">🤖</div>
+      <h3>Auto-Purify Mode</h3>
+      <p>When pollution spikes above your set threshold, Vayurakshak automatically ramps up fan speed and sends a phone notification. Clean air without lifting a finger.</p>
+    </div>
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">🖥️</div>
+      <h3>Digital Display Panel</h3>
+      <p>Onboard LED display shows live AQI, fan speed, filter life remaining, and room humidity at a glance — no app needed for day-to-day use.</p>
+    </div>
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">🔔</div>
+      <h3>Filter Change Alerts</h3>
+      <p>Tracks cumulative runtime and air quality history to predict exactly when your filter needs replacing — no guessing, no wasted filters.</p>
+    </div>
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">😴</div>
+      <h3>Sleep Mode (22dB)</h3>
+      <p>Ultra-quiet sleep mode runs the fan at its lowest effective speed. At 22dB it's quieter than a whisper — you won't even know it's on.</p>
+    </div>
+    <div class="smart-card fade-up">
+      <div class="smart-card-icon">🏠</div>
+      <h3>Smart Home Integration</h3>
+      <p>Future roadmap includes native compatibility with Google Home, Amazon Alexa, and local MQTT/Home Assistant setups for full smart home automation.</p>
+      <span class="tag-future">Coming Soon</span>
+    </div>
+  </div>
+
+  <div class="smart-highlight-row" style="margin-top:40px;">
+    <div class="smart-highlight fade-up">
+      <div class="num">22dB</div>
+      <p>Quieter than a library whisper in Sleep Mode</p>
+    </div>
+    <div class="smart-highlight fade-up">
+      <div class="num">99.9%</div>
+      <p>Particle capture efficiency at PM2.5 level</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── WAITLIST ── -->
+<section class="specs-buy-section" id="specs">
+  <div style="max-width:560px; margin:0 auto;">
+    <div id="buy">
+      <div class="buy-card fade-up">
+        <div class="product-name-sm">Vayurakshak</div>
+        <div class="tagline-sm">Join the Waitlist · Be First to Know</div>
+        <div class="success-msg" id="waitlist-success">✓ You're on the list! We'll be in touch soon.</div>
+        <div class="error-msg" id="waitlist-error"></div>
+        <p class="waitlist-label">Reserve your spot — we'll notify you when it's ready for order.</p>
+        <div class="waitlist-form" id="waitlist-form-fields">
+          <input type="text" id="wl-name" placeholder="Your full name" autocomplete="off"/>
+          <input type="email" id="wl-email" placeholder="Email address" autocomplete="off"/>
+          <input type="tel" id="wl-phone" placeholder="Phone number (optional)" autocomplete="off"/>
+          <select id="wl-use">
+            <option value="" disabled selected>Intended use</option>
+            <option value="hostel">Hostel / PG Room</option>
+            <option value="home">Home (Bedroom / Living Room)</option>
+            <option value="office">Office / Workspace</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button class="buy-btn" id="waitlist-btn" onclick="submitWaitlist()">Join Waitlist</button>
+        <button class="wishlist-btn" onclick="scrollToSection('technology')">View Technology Details</button>
+        <div class="buy-features">
+          <div class="buy-feature">Live smoke-box demos — rapid air clearance</div>
+          <div class="buy-feature">Low-cost filter replacements</div>
+          <div class="buy-feature">Simple maintenance, no service centre needed</div>
+          <div class="buy-feature">2-year warranty included</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AQI MONITOR ── -->
+<section class="monitor-section" id="monitor">
+  <div class="section-tag">Real-Time Intelligence</div>
+  <div class="section-title">Know Your Air,<br><em>Always</em></div>
+  <div class="section-sub">The built-in precision sensor suite monitors room air quality in real time — displayed on the onboard LED panel and synced to the PureAir app on your phone.</div>
+
+  <div class="monitor-features fade-up" style="margin-top:60px; max-width:680px;">
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">01</div>
+        <h3>Particle Detection</h3>
+        <p>Onboard sensors continuously measure airborne particle concentrations across multiple size ranges — updating every few seconds so the display always reflects your actual room air.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">02</div>
+        <h3>Gas & Humidity Monitoring</h3>
+        <p>Tracks CO₂ and humidity levels alongside particle data — giving you a full picture of indoor air quality, not just dust.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">03</div>
+        <h3>Auto-Purify Mode</h3>
+        <p>When air quality drops below your comfort level, Vayurakshak automatically increases output and alerts your phone — no manual intervention needed.</p>
+      </div>
+      <div class="monitor-feature">
+        <div class="monitor-feature-num">04</div>
+        <h3>PureAir App (iOS & Android)</h3>
+        <p>View trends, set schedules, control the device remotely, and get timely filter reminders — all from your phone.</p>
+      </div>
+  </div>
+</section>
+
+<!-- ── HIGHLIGHTS ── -->
+<section class="highlights-section" id="highlights">
+  <div class="section-tag">Why Vayurakshak</div>
+  <div class="section-title">Built for <em>Real Conditions</em></div>
+
+  <div class="highlights-grid">
+    <div class="highlight-card fade-up">
+      <div class="highlight-card-icon">🎯</div>
+      <h3>Maximum Effectiveness</h3>
+      <p>Rapid air clearance demonstrated live in smoke-box tests. Clears a standard hostel room from hazy to clean in under 20 minutes on full speed.</p>
+    </div>
+    <div class="highlight-card fade-up">
+      <div class="highlight-card-icon">⚡</div>
+      <h3>Low Electricity Load</h3>
+      <p>At 45W max and typical use well under that, Vayurakshak won't trip your hostel's circuit breaker or add a painful line item to your electricity bill.</p>
+    </div>
+    <div class="highlight-card fade-up">
+      <div class="highlight-card-icon">🔧</div>
+      <h3>Easy Maintenance</h3>
+      <p>Straightforward upkeep with no special tools or service appointments. Filter changes are quick, affordable, and take just a few minutes — keeping long-term costs low.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── NEWSLETTER ── -->
+<section class="newsletter-section" id="newsletter">
+  <div class="section-tag" style="position:relative;z-index:2;">Stay in the Loop</div>
+  <h2 style="position:relative;z-index:2;">Get Clean Air <em style="font-style:italic;">Updates</em></h2>
+  <p style="position:relative;z-index:2;">Project launches, filter tips, air quality insights, and exclusive early-access offers — delivered to your inbox every 1–2 weeks. No spam, ever.</p>
+  <div class="nl-form" style="position:relative;z-index:2;" id="nl-form">
+    <input class="nl-input" type="email" id="nl-email" placeholder="Enter your email address"/>
+    <button class="nl-btn" id="nl-btn" onclick="subscribeNewsletter()">Subscribe</button>
+  </div>
+  <div class="nl-success" id="nl-success">🎉 You're subscribed! Watch your inbox for updates from team@pureair.in</div>
+  <div class="nl-error" id="nl-error"></div>
+  <p class="nl-privacy" style="position:relative;z-index:2;">We send from <strong>team@pureair.in</strong> · Unsubscribe any time · No ads, no sharing</p>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="section-tag">Start Your Journey</div>
+  <div class="section-title">Making Clean Air Affordable <em>for Everyone</em></div>
+  <div class="section-sub">Project VayuRaksha aims to provide practical and cost-effective air purification for students, hostels, and middle-class households using locally engineered technology.</div>
+  <div class="cta-actions">
+    <a href="#buy" class="btn-light">Join the Waitlist</a>
+    <a href="#technology" class="btn-outline" style="color:rgba(255,255,255,0.7); border-color:rgba(255,255,255,0.3);">Explore Technology</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="nav-logo">Pure<span>Air</span></a>
+    <p class="footer-tagline">Engineering clean air for Indian homes.<br>Breathe better, live longer.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Product</h4>
+    <ul>
+      <li><a href="#what">What It Does</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="#smart">Smart Features</a></li>
+      <li><a href="#monitor">Air Monitor</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About PureAir</a></li>
+      <li><a href="#">Silicon University</a></li>
+      <li><a href="#">Sustainability</a></li>
+      <li><a href="#">Press</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <ul>
+      <li><a href="#">Help Centre</a></li>
+      <li><a href="#">Filter Replacement Guide</a></li>
+      <li><a href="#">Maintenance Guide</a></li>
+      <li><a href="#buy">Join Waitlist</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 PureAir · Team VayuRaksha · Silicon University. All rights reserved.</p>
+  <p>Privacy Policy · Terms of Use</p>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────
+  // CONFIG — change this to your backend URL when deployed
+  // ─────────────────────────────────────────────────────────────────
+  const API_BASE = 'http://localhost:5000/api';
+  // For production, change to e.g.: const API_BASE = 'https://your-server.com/api';
+
+  // ─────────────────────────────────────────────────────────────────
+  // SCROLL ANIMATIONS
+  // ─────────────────────────────────────────────────────────────────
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  faders.forEach(el => observer.observe(el));
+  document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
+
+  // Nav scroll shadow
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(47,63,74,0.08)' : 'none';
+  });
+
+  // Hamburger menu
+  let menuOpen = false;
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    const links = document.querySelector('.nav-links');
+    if (menuOpen) {
+      links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(248,247,244,0.98);backdrop-filter:blur(18px);padding:24px 24px 32px;gap:18px;border-bottom:1px solid rgba(122,170,146,0.15);z-index:99;';
+    } else {
+      links.style.cssText = 'display:none;';
+    }
+  }
+
+  function scrollToSection(id) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // TOAST
+  // ─────────────────────────────────────────────────────────────────
+  function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-icon').textContent = isError ? '✕' : '✓';
+    toast.className = 'toast' + (isError ? ' error' : '');
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 4500);
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // WAITLIST – POST to backend
+  // ─────────────────────────────────────────────────────────────────
+  async function submitWaitlist() {
+    const name = document.getElementById('wl-name').value.trim();
+    const email = document.getElementById('wl-email').value.trim();
+    const phone = document.getElementById('wl-phone').value.trim();
+    const intendedUse = document.getElementById('wl-use').value;
+
+    // Client-side validation
+    if (!name) { showToast('Please enter your name.', true); return; }
+    if (!email || !email.includes('@')) { showToast('Please enter a valid email.', true); return; }
+
+    const btn = document.getElementById('waitlist-btn');
+    btn.disabled = true;
+    btn.textContent = 'Joining…';
+    document.getElementById('waitlist-error').style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/waitlist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, intendedUse }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        // ✅ Success
+        document.getElementById('waitlist-success').style.display = 'block';
+        document.getElementById('waitlist-success').textContent = `✓ ${data.message}`;
+        document.getElementById('waitlist-form-fields').style.opacity = '0.4';
+        document.getElementById('waitlist-form-fields').style.pointerEvents = 'none';
+        btn.textContent = '✓ On the Waitlist';
+        showToast(data.message);
+
+        // Refresh signup count in social proof bar
+        loadSignupCount();
+      } else {
+        // ❌ Server-side error (duplicate, validation, etc.)
+        const errMsg = data.message || 'Something went wrong. Please try again.';
+        document.getElementById('waitlist-error').textContent = errMsg;
+        document.getElementById('waitlist-error').style.display = 'block';
+        showToast(errMsg, true);
+        btn.disabled = false;
+        btn.textContent = 'Join Waitlist';
+      }
+    } catch (err) {
+      // Network / server offline
+      const errMsg = 'Could not connect to server. Please try again later.';
+      document.getElementById('waitlist-error').textContent = errMsg;
+      document.getElementById('waitlist-error').style.display = 'block';
+      showToast(errMsg, true);
+      btn.disabled = false;
+      btn.textContent = 'Join Waitlist';
+      console.error('[Waitlist]', err);
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // NEWSLETTER – POST to backend
+  // ─────────────────────────────────────────────────────────────────
+  async function subscribeNewsletter() {
+    const email = document.getElementById('nl-email').value.trim();
+    if (!email || !email.includes('@')) { showToast('Please enter a valid email address.', true); return; }
+
+    const btn = document.getElementById('nl-btn');
+    btn.disabled = true;
+    btn.textContent = 'Subscribing…';
+    document.getElementById('nl-error').style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}/newsletter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('nl-success').style.display = 'block';
+        document.getElementById('nl-success').textContent = `🎉 ${data.message}`;
+        document.getElementById('nl-form').style.display = 'none';
+        showToast(data.message);
+      } else {
+        const errMsg = data.message || 'Something went wrong.';
+        document.getElementById('nl-error').textContent = errMsg;
+        document.getElementById('nl-error').style.display = 'block';
+        showToast(errMsg, true);
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      }
+    } catch (err) {
+      const errMsg = 'Could not connect to server. Please try again later.';
+      document.getElementById('nl-error').textContent = errMsg;
+      document.getElementById('nl-error').style.display = 'block';
+      showToast(errMsg, true);
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // SOCIAL PROOF – load signup count from backend
+  // ─────────────────────────────────────────────────────────────────
+  async function loadSignupCount() {
+    try {
+      const res = await fetch(`${API_BASE}/waitlist/count`);
+      const data = await res.json();
+      if (data.success && data.count > 0) {
+        document.getElementById('signup-count').textContent = data.count;
+        document.getElementById('signup-count-display').style.display = 'flex';
+      }
+    } catch (_) {
+      // Silently fail — social proof bar is optional
+    }
+  }
+
+  // Load count on page load
+  loadSignupCount();
+
+  // ─────────────────────────────────────────────────────────────────
+  // IMAGE PREVIEW
+  // ─────────────────────────────────────────────────────────────────
+  function previewImage(input, imgId) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.getElementById(imgId);
+        img.src = e.target.result;
+        img.style.display = 'block';
+        input.closest('.filter-placeholder').style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function previewWhatImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.getElementById('what-img');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        input.closest('.what-image-placeholder').style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // Enter key for forms
+  document.getElementById('wl-email').addEventListener('keydown', e => { if (e.key === 'Enter') submitWaitlist(); });
+  document.getElementById('nl-email').addEventListener('keydown', e => { if (e.key === 'Enter') subscribeNewsletter(); });
+</script>
+</body>
+</html>
